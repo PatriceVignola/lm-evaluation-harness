@@ -60,8 +60,7 @@ class OptimumHFLM(BaseLM):
             revision=revision,
             trust_remote_code=trust_remote_code,
             provider=execution_provider,
-        ).to(self.device)
-        self.gpt2.eval()
+        )
 
         self.tokenizer = transformers.AutoTokenizer.from_pretrained(
             pretrained if tokenizer is None else tokenizer,
@@ -128,8 +127,7 @@ class OptimumHFLM(BaseLM):
         returns: a torch tensor of shape [batch, sequence, vocab] with the
         logits returned from the model
         """
-        with torch.no_grad():
-            return self.gpt2(inps)[0]
+        return self.gpt2(inps)[0]
 
     def _model_generate(self, context, max_length, eos_token_id):
         generation_kwargs = {"do_sample": False, "max_length": max_length}
